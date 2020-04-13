@@ -1,0 +1,34 @@
+import numpy as np
+from sklearn.manifold import TSNE
+from sklearn.datasets import load_iris
+from keras.datasets import fashion_mnist
+import matplotlib.pyplot as plt
+import pylab
+from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D
+from keras.models import Model
+from keras import backend as K
+
+
+(X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
+X_train = X_train[:5000] 
+y_train = y_train[:5000]
+X_test = X_test[:2000]
+y_test = y_test[:2000] 
+X_train = X_train.astype('float32') / 255.
+X_test = X_test.astype('float32') / 255.
+X_train_reshaped = X_train.reshape((len(X_train), np.prod(X_train.shape[1:])))
+X_test_reshaped = X_test.reshape((len(X_test), np.prod(X_test.shape[1:])))
+#print x_train.shape
+
+ 
+#iris= load_iris() 
+#X = iris.data 
+#y= iris.target
+X_embedded = TSNE(n_components=2, perplexity=25, learning_rate=400).fit_transform(X_train_reshaped)
+X_embedded.shape 
+pylab.scatter(X_embedded[:, 0], X_embedded[:, 1],20,y_train)
+pylab.show()
+X_embedded_test = TSNE(n_components=2, perplexity=25, learning_rate=400).fit_transform(X_test_reshaped)
+X_embedded_test.shape
+pylab.scatter(X_embedded_test[:, 0], X_embedded_test[:, 1], 20, y_test)
+pylab.show()
